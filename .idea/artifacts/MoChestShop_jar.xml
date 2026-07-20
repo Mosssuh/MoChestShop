@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MoChestShop:jar">
+    <output-path>$USER_HOME$/Escritorio/MoJars</output-path>
+    <root id="archive" name="MoChestShop.jar">
+      <element id="module-output" name="MoChestShop" />
+    </root>
+  </artifact>
+</component>

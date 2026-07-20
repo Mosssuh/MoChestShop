@@ -1,0 +1,190 @@
+MYSQL_ENABLED: false
+MYSQL:
+  HOST: 'localhost'
+  PORT: 0000
+  DATABASE: 'ChestShopData'
+  USER: 'root'
+  PASSWORD: ''
+
+DATA_SAVE_INTERVAL: 300 # Seconds
+
+NO_ITEMS_FOR_TRADE: "&cThere are no items for trade"
+SELL_LIST_ITEMS_FORMAT: "&a%position%. %item_name% &8| &7Price: &2$&a%selling_price% | &7Available: %sale_items%"
+BUY_LIST_ITEMS_FORMAT: "&a%position%. %item_name% &8| &7Price: &2$&a%purchasing_price%"
+HOLOGRAM:
+  PLUGIN: DecentHolograms
+  UPDATE_INTERVAL: 2 # In seconds
+  MESSAGE:
+    - "&7------------------------"
+    - "&aChestShop's %player%"
+    - "&r"
+    - "&aStatus: &7%chest_status%"
+    - "&aTrade: &7%chest_trade%"
+    - "&aEconomy: &7%selected_economy_prefix%"
+    - "&r"
+    - "&bItems:"
+    - "%chest_items_list%"
+    - "&7------------------------"
+
+SLOT_TOKEN:
+  MATERIAL: MAGMA_CREAM
+  DATA: 0
+  NAME: "&a&lSlot Token"
+  LORE:
+    - '&8Add more slots to your ChestShop.'
+    - '&r'
+    - '&eClick this item with your ChestShop'
+    - '&eopened to enable a new slot.'
+
+
+# You can have many economies active, you can select in the chest with what economy
+# you want to buy or sell.
+# Economies:
+#   Vault
+#   Experience (Minecraft)
+#   RivalCredits
+#   CoinsEngine
+#
+
+ECONOMIES:
+  Vault:
+    id: 'vault_coins'
+    prefix: "Coins"
+  Minecraft:
+    Experience:
+      id: 'minecraft_experience'
+      prefix: "EXP"
+
+PREFIXES:
+  BUY: "Buy"
+  SELL: "Sell"
+  OPEN: "&aOpen"
+  CLOSED: "&cClosed"
+
+
+GUIS:
+  GUI_NAME: "ChestShop's %player%"
+  BACK_ITEM:
+    MATERIAL: ARROW
+    NAME: '&cBack'
+  CLOSE_ITEM:
+    MATERIAL: BARRIER
+    NAME: '&cClose'
+  PURCHASING_MENU_CONFIGURATION:
+    REMOVE_AMOUNT_ITEM:
+      MATERIAL: LIME_STAINED_GLASS_PANE
+      NAME: '&eClick to remove x%amount%'
+      LORE:
+        - '&r'
+        - '&aAvailable: &7%purchased_items%'
+        - '&r'
+    ASSIGN_PRICE:
+      MATERIAL: SIGN
+      NAME: '&eAssign purchase price'
+      LORE:
+        - '&r'
+        - '&aPrice: &2$&a%purchasing_price%'
+        - '&r'
+  SELLING_MENU_CONFIGURATION:
+    REMOVE_AMOUNT_ITEM:
+      MATERIAL: LIME_STAINED_GLASS_PANE
+      NAME: '&eClick to withdraw $%sales_earnings% %selected_economy_prefix%'
+      LORE:
+        - '&r'
+        - '&aSold Items: &7%sold_items%'
+        - '&r'
+    ASSIGN_PRICE:
+      MATERIAL: SIGN
+      NAME: '&eAssign sale price'
+      LORE:
+        - '&r'
+        - '&aPrice: &2$&a%selling_price%'
+        - '&r'
+    ITEMS_FOR_SALE:
+      MATERIAL: CHEST
+      NAME: '&eItems for Sale'
+      LORE:
+        - '&r'
+        - '&aIn stock: %sale_items%'
+        - '&r'
+        - '&eLeft click to add stock'
+        - '&eRight click to withdraw stock'
+
+
+  CHEST_MENU_CONFIGURATION:
+    SELECTED_SLOT_ITEM:
+      PURCHASING:
+        LORE:
+          - '&r'
+          - '&aPurchased Items: &7%purchased_items%'
+          - '&2Purchasing Price: &7$%purchasing_price%'
+          - '&r'
+          - '&eLeft-click to collect 1x'
+          - '&eRight-click to configure item'
+          - '&6Shift Right-click to remove the item!'
+      SELLING:
+        LORE:
+          - '&r'
+          - '&aSold Items: &7%sold_items%'
+          - '&aEarnings: $&7%sales_earnings%'
+          - '&2Selling Price: &7$%selling_price%'
+          - '&r'
+          - '&aStock: %sale_items%'
+          - '&r'
+          - '&eLeft-click to collect %selected_economy_prefix%'
+          - '&eRight-click to configure item'
+          - '&6Shift Right-click to remove the item!'
+    UNLOCKED_SLOT_ITEM:
+      MATERIAL: LIME_STAINED_GLASS_PANE
+      NAME: '&aSlot %slot%'
+      LORE:
+        - '&r'
+        - '&eClick your item to select!'
+    LOCKED_SLOT_ITEM:
+      MATERIAL: RED_STAINED_GLASS_PANE
+      NAME: '&aSlot %slot% &7(&cLocked&7)'
+      LORE:
+        - '&r'
+        - '&eUnlock with a Slot Token!'
+      ENCHANTS:
+        - 'LURE:1'
+      FLAGS:
+        - 'HIDE_ENCHANTS'
+    TRADE_SWITCH_ITEM:
+      MATERIAL: PAPER
+      NAME: '&bSelect Trade'
+      SWITCH_MESSAGE: "&eClick to switch!"
+      BUY_PREFIX: "Buy"
+      SELL_PREFIX: "Sell"
+    ECONOMY_SWITCH_ITEM:
+      MATERIAL: MAGMA_CREAM
+      NAME: '&bSelect Economy'
+      SWITCH_MESSAGE: '&eClick to switch!'
+    CHEST_STATUS_SWITCH_ITEM:
+      MATERIAL: PAPER
+      NAME: '&bSelect Status'
+      SWITCH_MESSAGE: "&eClick to switch!"
+
+
+  CHEST_MENU_CLIENT:
+    PURCHASING:
+      LORE:
+        - '&r'
+        - '&2Purchasing Price: &7$%purchasing_price%'
+        - '&r'
+        - '&eClick to set sales quantity'
+    SELLING:
+      LORE:
+        - '&r'
+        - '&aYou can buy %sale_items% items'
+        - '&2Selling Price: &7$%selling_price%'
+        - '&r'
+        - '&eClick to set purchase quantity'
+    NO_ITEM_IN_TRADE:
+      MATERIAL: GRAY_STAINED_GLASS_PANE
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+name: MoChestShop
+version: '${project.version}'
+main: mv.mossuh.mochestshop.MoChestShop
+api-version: '1.13'
+
+depend:
+  - 'MoCore'
+
+softdepend:
+  - PlaceholderAPI
+  - Vault
+  - DecentHolograms
+
+commands:
+  mochestshop:
+    aliases:
+      - mochest
+      - moshop

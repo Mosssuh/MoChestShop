@@ -1,0 +1,85 @@
+NO_PERMISSION: "&8[&bMoChestShop&8] &cYou don't have permission."
+INVALID_PLAYER: "&8[&bMoChestShop&8] &cThat player is invalid."
+INVALID_QUANTITY: "&8[&bMoChestShop&8] &cThat quantity is invalid."
+INVALID_CHEST: "&8[&bMoChestShop&8] &cThat chest is invalid."
+INVALID_PRICE: "&8[&bMoChestShop&8] &cThat price is invalid."
+
+MODIFIED_CHEST: "&8[&bMoChestShop&8] &cThe ChestShop has been modified, try to reopen it."
+CLOSED_CHEST: "&8[&bMoChestShop&8] &cThe ChestShop has been closed."
+COOLDOWN: "&8[&bMoChestShop&8] &cYou have to wait %cooldown%."
+IS_NOT_OWNER: "&8[&bMoChestShop&8] &cYou're not the owner of the ChestShop!"
+IS_NEXT_CHEST: "&8[&bMoChestShop&8] &cYou can't place a ChestShop next to another one."
+DONT_TRADE_ITEM: "&8[&bMoChestShop&8] &cYou can't trade this item."
+
+CHEST_SHOP_CLOSED: "&8[&bMoChestShop&8] &cThis ChestShop is closed!"
+
+PLAYER_PLACE_CHEST: "&8[&bMoChestShop&8] &aYou have placed a ChestShop!"
+PLAYER_BREAK_CHEST: "&8[&bMoChestShop&8] &aYou have removed the ChestShop successfully!"
+
+SET_SLOTS: "&8[&bMoChestShop&8] &aThe unlocked slots of the chest now are %unlocked_slots%"
+
+GIVE_CHEST_SENDER: "&8[&bMoChestShop&8] &aYou have given %amount% %section% chest to %player%."
+GIVE_CHEST_RECEIVER: "&8[&bMoChestShop&8] &aYou have received %amount% %section% chest!"
+GIVE_ALL_CHEST_SENDER: "&8[&bMoChestShop&8] &aYou have given %amount% %section% chest to all online players."
+
+CHEST_REMOVED_ITEM: "&8[&bMoChestShop&8] &cYou have removed the item from the slot %slot%."
+
+SLOT_NO_COINS_COLLECT: "&8[&bMoChestShop&8] &cYou don't have %selected_economy_prefix% to collect."
+SLOT_COLLECT_COINS: "&8[&bMoChestShop&8] &aYou have collected $%sales_earnings% %selected_economy_prefix% of %sold_items% items sold."
+SLOT_NO_ITEMS_COLLECT: "&8[&bMoChestShop&8] &cYou don't have enough items to collect."
+SLOT_COLLECT_ITEMS: "&8[&bMoChestShop&8] &aYou have collected %amount% items."
+
+COLLECT_ITEMS_TO_CHANGE: "&8[&bMoChestShop&8] &cYou need to collect the items to change."
+COLLECT_COINS_TO_CHANGE: "&8[&bMoChestShop&8] &cYou need to collect the %selected_economy_prefix% to change."
+COLLECT_ITEMS_NOT_ENOUGH_SPACE: "&8[&bMoChestShop&8] &cYou don't have enough space in your inventory"
+
+
+ITEM_ALREADY_ADDED: "&8[&bMoChestShop&8] &cThis item is already in the ChestShop."
+ITEM_TAKEN_SLOTS: "&8[&bMoChestShop&8] &cYou can't add it because all slots are in use."
+SLOT_ITEM_SELECTED: "&8[&bMoChestShop&8] &aThe item has been selected correctly in slot %slot%."
+
+PURCHASING_CLIENT_NO_ENOUGH_ITEMS: "&8[&bMoChestShop&8] &cYou don't have enough items to sell."
+PURCHASING_OWNER_NO_ENOUGH_COINS: "&8[&bMoChestShop&8] &cThe owner of the ChestShop don't have enough %selected_economy_prefix% to purchase your item(s)."
+# Variables: %player%, %item_name%, %amount%
+PURCHASING_CLIENT_SOLD_ITEMS: "&8[&bMoChestShop&8] &aYou sold %amount% items successfully!"
+PURCHASING_OWNER_PURCHASED_ITEMS: "&8[&bMoChestShop&8] &a%player% sold you %amount% %item_name%&a."
+
+SELLING_OWNER_NO_ENOUGH_ITEMS: "&8[&bMoChestShop&8] &cThe owner of the ChestShop don't have enough items in sale."
+SELLING_CLIENT_NO_ENOUGH_COINS: "&8[&bMoChestShop&8] &cYou don't have enough %selected_economy_prefix% to purchase the items."
+SELLING_CLIENT_NO_ENOUGH_SPACE: "&8[&bMoChestShop&8] &cYou don't have enough space in your inventory."
+SELLING_CLIENT_PURCHASED_ITEMS: "&8[&bMoChestShop&8] &aYou have purchased %amount% items successfully!"
+SELLING_OWNER_SOLD_ITEMS: "&8[&bMoChestShop&8] &aYou sold %amount% items to %player%!"
+SELLING_ITEMS_ADD_STOCK_NO_ENOUGH: "&8[&bMoChestShop&8] &cYou don't have enough items to add to stock."
+SELLING_ITEMS_ADDED_STOCK: "&8[&bMoChestShop&8] &aAdded %quantity% items to stock in slot %slot%."
+SELLING_ITEMS_WITHDRAW_STOCK_NO_ENOUGH: "&8[&bMoChestShop&8] &cYou don't have enough stock to withdraw."
+SELLING_ITEMS_WITHDRAWN_STOCK: "&8[&bMoChestShop&8] &aYou withdrew %quantity% items from slot %slot%."
+SELLING_ITEMS_WITHDRAW_NO_ENOUGH_SPACE: "&8[&bMoChestShop&8] &aYou don't have enough space to withdraw %quantity% items."
+
+CHEST_CLOSED_REQUIRED: "&8[&bMoChestShop&8] &cIs required to close the ChestShop!"
+
+
+SLOT_TOKEN_CLAIMED: "&8[&bMoChestShop&8] &aYou have unlocked the Slot %slot%!"
+SLOT_TOKEN_SENDER_MESSAGE: "&8[&bMoChestShop&8] &aYou gave to %player% a Slot Token."
+SLOT_TOKEN_RECEIVER_MESSAGE: "&8[&bMoChestShop&8] &aYou have received a Slot Token!"
+SLOT_TOKEN_MAX_UNLOCKED: "&8[&bMoChestShop&8] &cYou have unlocked the maximum number of slots in this ChestShop."
+
+
+ASSIGN_PRICE:
+  - "&r"
+  - "&8[&bMoChestShop&8] &aWrite in the chat the new price. Example: 1000000"
+  - "&r"
+ASSIGN_PRICE_WRONG: "&8[&bMoChestShop&8] &cYou aren't writing a valid value."
+ASSIGNED_PRICE: "&8[&bMoChestShop&8] &aThe price was been changed to %price%."
+
+ASSIGN_TRADE_QUANTITY:
+  - "&r"
+  - "&8[&bMoChestShop&8] &aWrite in the the quantity you want to trade. Example: 10"
+  - "&r"
+ASSIGN_TRADE_QUANTITY_WRONG: "&8[&bMoChestShop&8] &cYou aren't writing a valid quantity."
+
+ASSIGN_QUANTITY:
+  - "&r"
+  - "&8[&bMoChestShop&8] &aWrite in the the quantity you want. Example: 10"
+  - "&r"
+ASSIGN_QUANTITY_WRONG: "&8[&bMoChestShop&8] &cYou aren't writing a valid quantity."
+

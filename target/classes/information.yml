@@ -1,0 +1,34 @@
+ChestShop Variables:
+  - '%unlocked_slots%'
+  - '%selected_economy%'
+  - '%selected_economy_prefix%'
+  - '%economy_<position>%'
+
+Slot Variables:
+  - '%slot%'
+  # Selling Variables
+  - '%sold_items%'
+  - '%selling_price%'
+  - '%sales_earnings%'
+  # Purchasing Variables
+  - '%purchased_items%'
+  - '%purchasing_price%'
+
+Purchasing Menu Variables:
+  - '%amount%'
+
+Client Menu Variables:
+  Purchasing:
+    - '%client_items%'
+
+
+
+
+
+ECONOMIES:
+  - 'Vault'
+  - 'Minecraft -> Experience'
+  - 'EdPrison -> <Currency created  in EdPrison>'
+  - 'QuadrexMobCoins' # Economy used: MobCoins
+  - 'RivalHarvesterHoes' # Economy used: Essence
+  - 'RivalPickaxes' # Economy used: Essence

@@ -1,0 +1,16 @@
+CHESTS:
+  BasicChest:
+    # The unlocked slots of the players will be 1 of 10
+    unlocked-slots: 1
+    # You can set only 10 economies
+    economies:
+      - 'minecraft_experience'
+      - 'vault_coins'
+    item-info:
+      name: "&aBasic &8| &fShop"
+      lore:
+        - ''
+        - '&7Type: &aCommon'
+        - '&7Slots: &e%unlocked_slots%&8/&e10'
+        - ''
+        - '&ePlace this chest!'
