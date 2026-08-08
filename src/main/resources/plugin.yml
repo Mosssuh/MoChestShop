@@ -4,7 +4,8 @@ main: mv.mossuh.mochestshop.MoChestShop
 api-version: '1.13'
 
 depend:
-  - 'MoCore'
+  - MoCore
+  - NBTAPI
 
 softdepend:
   - PlaceholderAPI
