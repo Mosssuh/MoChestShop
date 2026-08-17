@@ -28,7 +28,7 @@ public class ChestPlayerMenu {
         UUID ownerUUID = chest.getOwner();
         OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerUUID);
 
-        String guiName = UtilString.get(Configs.getGuiNameConfig()).setPlaceholders(owner).setDefaultPlayerVariables(owner).hex().apply();
+        String guiName = UtilString.get(Configs.getGuiNameConfig()).setVariables(owner).setPlaceholders(owner).hex().apply();
         SingleGUI gui = new SingleGUI(6, guiName, location);
         gui.onGUIClick((e) -> {
             e.setCancelled(true);
@@ -47,20 +47,20 @@ public class ChestPlayerMenu {
             if (slot.isValid()) {
                 if (slot.hasItem()) {
                     GUIItem item = PlayerItems.SlotItem(gui, active, slot);
-                    gui.setItem(pos, item);
+                    gui.setItem(item, pos);
                 } else {
                     GUIItem item = PlayerItems.NoItemInTradeItem();
-                    gui.setItem(pos, item);
+                    gui.setItem(item, pos);
                 }
             } else {
                 GUIItem item = PlayerItems.NoItemInTradeItem();
-                gui.setItem(pos, item);
+                gui.setItem(item, pos);
             }
             slotPos += 1;
         }
 
         GUIItem close = OwnerItems.CloseItem(player);
-        gui.setItem(49, close);
+        gui.setItem(close, 49);
 
         player.openInventory(gui.getInventory());
     }

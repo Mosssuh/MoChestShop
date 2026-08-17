@@ -42,23 +42,23 @@ public class PlayerItems {
             case BUY:
                 List<String> pLore = Configs.getSelectedItemClientConfig().getPurchasingLore();
                 for (String l : pLore) {
-                    editor.addLoreLine(UtilString.get(l).setSlot(activeSlot).setChestShop(chest)
+                    editor.addLoreLine(UtilString.get(l).setVariables(activeSlot).setVariables(chest)
                             .setPlaceholders(ownerUUID).hex().apply());
                 }
                 break;
             case SELL:
                 List<String> sLore = Configs.getSelectedItemClientConfig().getSellingLore();
                 for (String l : sLore) {
-                    editor.addLoreLine(UtilString.get(l).setSlot(activeSlot).setChestShop(chest)
+                    editor.addLoreLine(UtilString.get(l).setVariables(activeSlot).setVariables(chest)
                             .setPlaceholders(ownerUUID).hex().apply());
                 }
                 break;
         }
 
         List<String> assignTradeQuantity = new ArrayList<>();
-        String assignTradeQuantityWrong = UtilString.get(Messages.ASSIGN_TRADE_QUANTITY_WRONG).setSlot(activeSlot).setChestShop(chest).hex().apply();
+        String assignTradeQuantityWrong = UtilString.get(Messages.ASSIGN_TRADE_QUANTITY_WRONG).setVariables(activeSlot).setVariables(chest).hex().apply();
         for (String l : Messages.ASSIGN_TRADE_QUANTITY) {
-            assignTradeQuantity.add(UtilString.get(l).setSlot(activeSlot).setChestShop(chest).hex().apply());
+            assignTradeQuantity.add(UtilString.get(l).setVariables(activeSlot).setVariables(chest).hex().apply());
         }
 
         ConfirmConfiguration confirmConfig = new ConfirmConfiguration(assignTradeQuantity, null, null, assignTradeQuantityWrong);
@@ -68,7 +68,7 @@ public class PlayerItems {
             int amount = (int) value;
 
             if (amount <= 0) {
-                UtilString.get(Messages.INVALID_QUANTITY).setChestShop(chest).setSlot(activeSlot)
+                UtilString.get(Messages.INVALID_QUANTITY).setVariables(chest).setVariables(activeSlot)
                         .hex().sendMessage(player);
                 return;
             }
@@ -83,16 +83,14 @@ public class PlayerItems {
                 double cost = info.getPurchasingPrice();
 
                 if (!UtilMethods.hasItem(player, tradedItem, amount)) {
-                    UtilString.get(Messages.PURCHASING_CLIENT_NO_ENOUGH_ITEMS).setChestShop(chest).setSlot(activeSlot)
-                            .setPlaceholders(ownerUUID).setItemStack(tradedItem).hex().sendMessage(player);
-                    player.closeInventory();
+                    UtilString.get(Messages.PURCHASING_CLIENT_NO_ENOUGH_ITEMS).setVariables(chest).setVariables(activeSlot).setVariables(tradedItem)
+                            .setPlaceholders(ownerUUID).hex().sendMessage(player);
                     return;
                 }
 
                 if (!ChestShopAPI.getManagers().getEconomies().getEconomy(economyID).hasAmount(ownerUUID, cost)) {
-                    UtilString.get(Messages.PURCHASING_OWNER_NO_ENOUGH_COINS).setChestShop(chest).setSlot(activeSlot)
-                            .setPlaceholders(ownerUUID).setItemStack(tradedItem).hex().sendMessage(player);
-                    player.closeInventory();
+                    UtilString.get(Messages.PURCHASING_OWNER_NO_ENOUGH_COINS).setVariables(chest).setVariables(activeSlot).setVariables(tradedItem)
+                            .setPlaceholders(ownerUUID).hex().sendMessage(player);
                     return;
                 }
 
@@ -106,33 +104,29 @@ public class PlayerItems {
                 info.addPurchasedItems(amount);
                 UtilMethods.removeItem(player, tradedItem, amount);
                 UtilString.get(Messages.PURCHASING_OWNER_PURCHASED_ITEMS).setVariables(refreshedVariables)
-                        .setChestShop(chest).setSlot(activeSlot).setDefaultPlayerVariables(player).setPlaceholders(ownerUUID).setItemStack(tradedItem).hex().sendMessage(ownerUUID);
+                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID).hex().sendMessage(ownerUUID);
                 UtilString.get(Messages.PURCHASING_CLIENT_SOLD_ITEMS).setVariables(refreshedVariables)
-                        .setChestShop(chest).setSlot(activeSlot).setDefaultPlayerVariables(player).setPlaceholders(ownerUUID).setItemStack(tradedItem).hex().sendMessage(player);
-                player.closeInventory();
+                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID).hex().sendMessage(player);
             } else if (type.equals(TradeType.SELL)) {
                 // The player is purchasing items
                 SellingInfo info = (SellingInfo) activeSlot.getInfo();
                 double cost = info.getSellingPrice() * amount;
 
                 if (info.getItemsForSale() < amount) {
-                    UtilString.get(Messages.SELLING_OWNER_NO_ENOUGH_ITEMS).setChestShop(chest).setSlot(activeSlot)
-                            .setPlaceholders(ownerUUID).setDefaultPlayerVariables(player).setItemStack(tradedItem).hex().sendMessage(player);
-                    player.closeInventory();
+                    UtilString.get(Messages.SELLING_OWNER_NO_ENOUGH_ITEMS).setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem)
+                            .setPlaceholders(ownerUUID).hex().sendMessage(player);
                     return;
                 }
 
                 if (!ChestShopAPI.getManagers().getEconomies().getEconomy(economyID).hasAmount(uuid, cost)) {
-                    UtilString.get(Messages.SELLING_CLIENT_NO_ENOUGH_COINS).setChestShop(chest).setSlot(activeSlot)
-                            .setPlaceholders(ownerUUID).setDefaultPlayerVariables(player).setItemStack(tradedItem).hex().sendMessage(player);
-                    player.closeInventory();
+                    UtilString.get(Messages.SELLING_CLIENT_NO_ENOUGH_COINS).setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem)
+                            .setPlaceholders(ownerUUID).hex().sendMessage(player);
                     return;
                 }
 
                 if (!UtilMethods.hasEnoughSpace(player, tradedItem, amount)) {
-                    UtilString.get(Messages.SELLING_CLIENT_NO_ENOUGH_SPACE).setChestShop(chest).setSlot(activeSlot)
-                            .setPlaceholders(ownerUUID).setDefaultPlayerVariables(player).setItemStack(tradedItem).hex().sendMessage(player);
-                    player.closeInventory();
+                    UtilString.get(Messages.SELLING_CLIENT_NO_ENOUGH_SPACE).setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem)
+                            .setPlaceholders(ownerUUID).hex().sendMessage(player);
                     return;
                 }
 
@@ -148,12 +142,11 @@ public class PlayerItems {
                 ChestShopAPI.getManagers().getEconomies().getEconomy(id).removeAmount(uuid, cost);
 
                 UtilString.get(Messages.SELLING_OWNER_SOLD_ITEMS).setVariables(refreshedVariables)
-                        .setChestShop(chest).setSlot(activeSlot).setDefaultPlayerVariables(player).setPlaceholders(ownerUUID)
-                        .setItemStack(tradedItem).hex().sendMessage(ownerUUID);
+                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID)
+                        .hex().sendMessage(ownerUUID);
                 UtilString.get(Messages.SELLING_CLIENT_PURCHASED_ITEMS).setVariables(refreshedVariables)
-                        .setChestShop(chest).setSlot(activeSlot).setDefaultPlayerVariables(player).setPlaceholders(ownerUUID)
-                        .setItemStack(tradedItem).hex().sendMessage(player);
-                player.closeInventory();
+                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID)
+                        .hex().sendMessage(player);
             }
         }, ResponseType.INTEGER);
         return item;

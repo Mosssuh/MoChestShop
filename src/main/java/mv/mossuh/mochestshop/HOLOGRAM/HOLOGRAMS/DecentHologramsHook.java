@@ -10,6 +10,8 @@ import mv.mossuh.mochestshop.CONFIGS.Config;
 import mv.mossuh.mochestshop.HOLOGRAM.HologramHook;
 import mv.mossuh.mochestshop.UTILITIES.UtilMethods;
 import mv.mossuh.mochestshop.UTILITIES.UtilString;
+import mv.mossuh.mocore.ENUMS.PluginType;
+import mv.mossuh.mocore.UTILITIES.PluginsChecker;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -21,9 +23,11 @@ public class DecentHologramsHook implements HologramHook {
     public String getPlugin() {
         return "DecentHolograms";
     }
+    private PluginType type = PluginType.DecentHolograms;
 
     @Override
     public void refresh(ActiveChestShop active) {
+        if (!PluginsChecker.isPluginEnabled(type)) return;
         if (!active.isValid()) return;
         Location location = active.getLocation();
 
@@ -45,7 +49,7 @@ public class DecentHologramsHook implements HologramHook {
             if (line.contains("%chest_items_list%")) {
                 newText.addAll(UtilMethods.getListSlotFormat(owner, chest.getSlots()));
             } else {
-                String l = UtilString.get(line).setChestShop(chest).setPlaceholders(owner).hex().apply();
+                String l = UtilString.get(line).setVariables(chest).setPlaceholders(owner).hex().apply();
                 newText.add(l);
             }
         }
@@ -65,6 +69,7 @@ public class DecentHologramsHook implements HologramHook {
 
     @Override
     public void spawn(ActiveChestShop active) {
+        if (!PluginsChecker.isPluginEnabled(type)) return;
         if (!active.isValid()) return;
         Location location = active.getLocation();
         Location newLocation = getHologramLocation(location);
@@ -83,7 +88,7 @@ public class DecentHologramsHook implements HologramHook {
             if (line.contains("%chest_items_list%")) {
                 newText.addAll(UtilMethods.getListSlotFormat(owner, chest.getSlots()));
             } else {
-                String l = UtilString.get(line).setChestShop(chest).setPlaceholders(owner).hex().apply();
+                String l = UtilString.get(line).setVariables(chest).setPlaceholders(owner).hex().apply();
                 newText.add(l);
             }
         }
@@ -93,6 +98,7 @@ public class DecentHologramsHook implements HologramHook {
 
     @Override
     public void remove(ActiveChestShop active) {
+        if (!PluginsChecker.isPluginEnabled(type)) return;
         if (!active.isValid()) return;
         Location location = active.getLocation();
         Location newLocation = getHologramLocation(location);

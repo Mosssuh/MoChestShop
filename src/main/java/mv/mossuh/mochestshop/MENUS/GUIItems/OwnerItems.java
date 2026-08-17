@@ -20,6 +20,7 @@ import mv.mossuh.mochestshop.UTILITIES.Chest.Collectors.PurchasingInfo;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Collectors.SellingInfo;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Collectors.TradeInfo;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Slot;
+import mv.mossuh.mochestshop.UTILITIES.DefaultVariables;
 import mv.mossuh.mochestshop.UTILITIES.Economies.Economy;
 import mv.mossuh.mochestshop.UTILITIES.Enums.ChestStatus;
 import mv.mossuh.mochestshop.UTILITIES.Enums.TradeType;
@@ -50,7 +51,7 @@ public class OwnerItems {
             if (slot.isValid()) {
                 if (slot.hasItem()) {
                     GUIItem item = OwnerItems.SelectedSlotItem(gui, active, slot);
-                    gui.setItem(pos, item);
+                    gui.setItem(item, pos);
                 } else {
                     GUIItem item;
                     if (slotPos <= unlockedSlots) {
@@ -58,7 +59,7 @@ public class OwnerItems {
                     } else {
                         item = OwnerItems.LockedSlotItem(slotPos);
                     }
-                    gui.setItem(pos, item);
+                    gui.setItem(item, pos);
                 }
             } else {
                 GUIItem item;
@@ -67,7 +68,7 @@ public class OwnerItems {
                 } else {
                     item = OwnerItems.LockedSlotItem(slotPos);
                 }
-                gui.setItem(pos, item);
+                gui.setItem(item, pos);
             }
             slotPos += 1;
         }
@@ -82,19 +83,19 @@ public class OwnerItems {
         MoItemStack editor = new MoItemStack(clone);
         TradeInfo info = slot.getInfo();
         TradeType type = info.getType();
-        List<VariableArg> variables = new ArrayList<>(UtilMethods.getSlotVariables(slot));
+        List<VariableArg> variables = new ArrayList<>(DefaultVariables.getSlotVariables(slot));
         switch (type) {
             case BUY:
                 List<String> pLore = Configs.getSelectedItemConfig().getPurchasingLore();
                 for (String l : pLore) {
-                    editor.addLoreLine(UtilString.get(l).setVariables(variables).setChestShop(chest)
+                    editor.addLoreLine(UtilString.get(l).setVariables(variables).setVariables(chest)
                             .setPlaceholders(chest.getOwner()).hex().apply());
                 }
                 break;
             case SELL:
                 List<String> sLore = Configs.getSelectedItemConfig().getSellingLore();
                 for (String l : sLore) {
-                    editor.addLoreLine(UtilString.get(l).setVariables(variables).setChestShop(chest)
+                    editor.addLoreLine(UtilString.get(l).setVariables(variables).setVariables(chest)
                             .setPlaceholders(chest.getOwner()).hex().apply());
                 }
                 break;
@@ -104,11 +105,11 @@ public class OwnerItems {
             Player player = e.getPlayer();
             UUID uuid = player.getUniqueId();
             ClickType click = e.getClickType();
-            List<VariableArg> refreshedVariables = new ArrayList<>(UtilMethods.getSlotVariables(slot));
+            List<VariableArg> refreshedVariables = new ArrayList<>(DefaultVariables.getSlotVariables(slot));
             if (click.equals(ClickType.SHIFT_RIGHT)) {
                 // To remove the item of the selected slot
                 if (chest.getStatus().equals(ChestStatus.OPEN)) {
-                    UtilString.get(Messages.CHEST_CLOSED_REQUIRED).setChestShop(chest)
+                    UtilString.get(Messages.CHEST_CLOSED_REQUIRED).setVariables(chest)
                             .hex().sendMessage(player);
                     player.closeInventory();
                     return;
@@ -117,18 +118,18 @@ public class OwnerItems {
                 if (!info.canSwitch()) {
                     switch (type) {
                         case BUY:
-                            UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setChestShop(chest)
+                            UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setVariables(chest)
                                     .hex().sendMessage(player);
                             player.closeInventory();
                             return;
                         case SELL:
                             SellingInfo si = (SellingInfo) info;
                             if (si.getSoldItems() > 0) {
-                                UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setChestShop(chest)
+                                UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setVariables(chest)
                                         .hex().sendMessage(player);
                             }
                             if (si.getItemsForSale() > 0) {
-                                UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setChestShop(chest)
+                                UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setVariables(chest)
                                         .hex().sendMessage(player);
                             }
                             player.closeInventory();
@@ -139,7 +140,7 @@ public class OwnerItems {
                 int slotPosition = slot.getSlot();
                 chest.removeSlot(slotPosition);
                 UpdateSlotItem(player, slotPosition, chest.getUnlockedSlots(), gui);
-                UtilString.get(Messages.CHEST_REMOVED_ITEM).setVariables(refreshedVariables).setChestShop(chest)
+                UtilString.get(Messages.CHEST_REMOVED_ITEM).setVariables(refreshedVariables).setVariables(chest)
                         .hex().sendMessage(player);
             } else if (click.equals(ClickType.LEFT)) {
                 String COOLDOWN_CODE = Config.PLUGIN_NAME+"OwnerItems-SelectedSlotItem-Cooldown"+chest.getUUID();
@@ -148,7 +149,7 @@ public class OwnerItems {
                     List<VariableArg> cooldownVariables = new ArrayList<>();
                     cooldownVariables.add(new VariableArg("%cooldown%", Cooldown.showCooldownFormatted(COOLDOWN_CODE, COOLDOWN, UtilMethods.getTimeFormat())));
                     UtilString.get(Messages.COOLDOWN).setVariables(cooldownVariables)
-                            .setChestShop(chest).hex().sendMessage(player);
+                            .setVariables(chest).hex().sendMessage(player);
                     player.closeInventory();
                     return;
                 }
@@ -160,15 +161,15 @@ public class OwnerItems {
                     PurchasingInfo i = (PurchasingInfo) slot.getInfo();
                     int purchasedItems = i.getPurchasedItems();
                     if (purchasedItems <= 0) {
-                        UtilString.get(Messages.SLOT_NO_ITEMS_COLLECT).setChestShop(chest).setVariables(refreshedVariables)
+                        UtilString.get(Messages.SLOT_NO_ITEMS_COLLECT).setVariables(chest).setVariables(refreshedVariables)
                                 .hex().sendMessage(player);
                         player.closeInventory();
                         return;
                     }
 
                     if (!UtilMethods.hasEnoughSpace(player, tradedItem, 1)) {
-                        UtilString.get(Messages.COLLECT_ITEMS_NOT_ENOUGH_SPACE).setVariables(refreshedVariables).setDefaultPlayerVariables(player)
-                                .setPlaceholders(ownerUUID).setChestShop(chest).hex().sendMessage(player);
+                        UtilString.get(Messages.COLLECT_ITEMS_NOT_ENOUGH_SPACE).setVariables(refreshedVariables).setVariables(player).setVariables(chest)
+                                .setPlaceholders(ownerUUID).hex().sendMessage(player);
                         player.closeInventory();
                         return;
                     }
@@ -177,14 +178,14 @@ public class OwnerItems {
                     i.removePurchasedItems(1);
 
                     UtilString.get(Messages.SLOT_COLLECT_ITEMS).setVariables(refreshedVariables)
-                            .setChestShop(chest).hex().sendMessage(player);
+                            .setVariables(chest).hex().sendMessage(player);
                     player.closeInventory();
 
                 } else if (type.equals(TradeType.SELL)) {
                     SellingInfo i = (SellingInfo) slot.getInfo();
                     int soldItems = i.getSoldItems();
                     if (soldItems <= 0) {
-                        UtilString.get(Messages.SLOT_NO_COINS_COLLECT).setChestShop(chest)
+                        UtilString.get(Messages.SLOT_NO_COINS_COLLECT).setVariables(chest)
                                 .setVariables(refreshedVariables).hex().sendMessage(player);
                         player.closeInventory();
                         return;
@@ -192,7 +193,7 @@ public class OwnerItems {
 
                     double price = soldItems * i.getSellingPrice();
                     UtilString.get(Messages.SLOT_COLLECT_COINS).setVariables(refreshedVariables)
-                            .setChestShop(chest).hex().sendMessage(player);
+                            .setVariables(chest).hex().sendMessage(player);
 
                     String id = chest.getSelectedEconomy();
                     i.setSoldItems(0);
@@ -212,14 +213,14 @@ public class OwnerItems {
     }
 
     public static void UpdateSlotItem(Player player, int slot, int unlockedSlots, SingleGUI gui) {
-        int position = UtilMethods.getInvPosition(slot);
+        int pos = UtilMethods.getInvPosition(slot);
         GUIItem item;
         if (slot <= unlockedSlots) {
             item = UnlockedSlotItem(slot);
         } else {
             item = LockedSlotItem(slot);
         }
-        gui.setItem(position, item);
+        gui.setItem(item, pos);
         gui.refreshGUI(player);
     }
 
@@ -239,9 +240,9 @@ public class OwnerItems {
         ChestShop chest = active.getChest();
 
         TradeSwitchItemConfig config = Configs.getTradeItemConfig();
-        String buyPrefix = UtilString.get(TradeType.BUY.getPrefix()).setChestShop(chest).removeColors().apply();
-        String sellPrefix = UtilString.get(TradeType.SELL.getPrefix()).setChestShop(chest).removeColors().apply();
-        String switchMessage = UtilString.get(config.getSwitchMessage()).setChestShop(chest).apply();
+        String buyPrefix = UtilString.get(TradeType.BUY.getPrefix()).setVariables(chest).removeColors().apply();
+        String sellPrefix = UtilString.get(TradeType.SELL.getPrefix()).setVariables(chest).removeColors().apply();
+        String switchMessage = UtilString.get(config.getSwitchMessage()).setVariables(chest).apply();
 
         GUIItem item = new GUIItem(stack);
         item.onItemClick(e -> {
@@ -252,7 +253,7 @@ public class OwnerItems {
                 List<VariableArg> cooldownVariables = new ArrayList<>();
                 cooldownVariables.add(new VariableArg("%cooldown%", Cooldown.showCooldownFormatted(COOLDOWN_CODE, COOLDOWN, UtilMethods.getTimeFormat())));
                 UtilString.get(Messages.COOLDOWN).setVariables(cooldownVariables)
-                        .setChestShop(chest).hex().sendMessage(player);
+                        .setVariables(chest).hex().sendMessage(player);
                 player.closeInventory();
                 return;
             }
@@ -277,17 +278,17 @@ public class OwnerItems {
             if (!canSwitch) {
                 switch (chest.getTradeType()) {
                     case BUY:
-                        UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setChestShop(chest)
+                        UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setVariables(chest)
                                 .hex().sendMessage(player);
                         player.closeInventory();
                         break;
                     case SELL:
                         if (haveSoldItems) {
-                            UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setChestShop(chest)
+                            UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setVariables(chest)
                                     .hex().sendMessage(player);
                         }
                         if (haveStockItems) {
-                            UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setChestShop(chest)
+                            UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setVariables(chest)
                                     .hex().sendMessage(player);
                         }
                         player.closeInventory();
@@ -317,7 +318,7 @@ public class OwnerItems {
             gui.refreshGUI(player);
             Set<Player> playersInventory = UtilMethods.closeInventoryPlayers(active.getLocation(), player);
             for (Player p : playersInventory) {
-                UtilString.get(Messages.MODIFIED_CHEST).setChestShop(chest).hex().sendMessage(p);
+                UtilString.get(Messages.MODIFIED_CHEST).setVariables(chest).hex().sendMessage(p);
             }
         });
 
@@ -337,7 +338,7 @@ public class OwnerItems {
                 List<VariableArg> cooldownVariables = new ArrayList<>();
                 cooldownVariables.add(new VariableArg("%cooldown%", Cooldown.showCooldownFormatted(COOLDOWN_CODE, COOLDOWN, UtilMethods.getTimeFormat())));
                 UtilString.get(Messages.COOLDOWN).setVariables(cooldownVariables)
-                        .setChestShop(chest).hex().sendMessage(player);
+                        .setVariables(chest).hex().sendMessage(player);
                 player.closeInventory();
                 return;
             }
@@ -360,17 +361,17 @@ public class OwnerItems {
             if (!canSwitch) {
                 switch (chest.getTradeType()) {
                     case BUY:
-                        UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setChestShop(chest)
+                        UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setVariables(chest)
                                 .hex().sendMessage(player);
                         player.closeInventory();
                         break;
                     case SELL:
                         if (haveSoldItems) {
-                            UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setChestShop(chest)
+                            UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setVariables(chest)
                                     .hex().sendMessage(player);
                         }
                         if (haveStockItems) {
-                            UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setChestShop(chest)
+                            UtilString.get(Messages.COLLECT_ITEMS_TO_CHANGE).setVariables(chest)
                                     .hex().sendMessage(player);
                         }
                         player.closeInventory();
@@ -402,14 +403,14 @@ public class OwnerItems {
                 newLore.add((activeEconomy ? " &a" : "&7") + "➛ " + prefix);
             }
             newLore.add("&r");
-            newLore.add(UtilString.get(config.getSwitchMessage()).setChestShop(chest).hex().apply());
+            newLore.add(UtilString.get(config.getSwitchMessage()).setVariables(chest).hex().apply());
             editor.setLore(newLore);
 
             updateSlots(gui, active);
             gui.refreshGUI(player);
             Set<Player> playersInventory = UtilMethods.closeInventoryPlayers(active.getLocation(), player);
             for (Player p : playersInventory) {
-                UtilString.get(Messages.MODIFIED_CHEST).setChestShop(chest).hex().sendMessage(p);
+                UtilString.get(Messages.MODIFIED_CHEST).setVariables(chest).hex().sendMessage(p);
             }
         });
         return item;
@@ -450,9 +451,9 @@ public class OwnerItems {
         ItemStack stack = OwnerStacks.StatusSwitch(active);
         ChestShop chest = active.getChest();
         ChestStatusSwitchItemConfig config = Configs.getChestStatusItemConfig();
-        String openPrefix = UtilString.get(ChestStatus.OPEN.getPrefix()).setChestShop(chest).removeColors().apply();
-        String closedPrefix = UtilString.get(ChestStatus.CLOSED.getPrefix()).setChestShop(chest).removeColors().apply();
-        String switchMessage = UtilString.get(config.getSwitchMessage()).setChestShop(chest).apply();
+        String openPrefix = UtilString.get(ChestStatus.OPEN.getPrefix()).setVariables(chest).removeColors().apply();
+        String closedPrefix = UtilString.get(ChestStatus.CLOSED.getPrefix()).setVariables(chest).removeColors().apply();
+        String switchMessage = UtilString.get(config.getSwitchMessage()).setVariables(chest).apply();
 
         GUIItem item = new GUIItem(stack);
         item.onItemClick(e -> {
@@ -463,7 +464,7 @@ public class OwnerItems {
                 List<VariableArg> cooldownVariables = new ArrayList<>();
                 cooldownVariables.add(new VariableArg("%cooldown%", Cooldown.showCooldownFormatted(COOLDOWN_CODE, COOLDOWN, UtilMethods.getTimeFormat())));
                 UtilString.get(Messages.COOLDOWN).setVariables(cooldownVariables)
-                        .setChestShop(chest).hex().sendMessage(player);
+                        .setVariables(chest).hex().sendMessage(player);
                 player.closeInventory();
                 return;
             }
@@ -480,7 +481,7 @@ public class OwnerItems {
             if (next.equals(ChestStatus.CLOSED)) {
                 Set<Player> playersInventory = UtilMethods.closeInventoryPlayers(active.getLocation(), player);
                 for (Player p : playersInventory) {
-                    UtilString.get(Messages.CLOSED_CHEST).setChestShop(chest).hex().sendMessage(p);
+                    UtilString.get(Messages.CLOSED_CHEST).setVariables(chest).hex().sendMessage(p);
                 }
             }
 

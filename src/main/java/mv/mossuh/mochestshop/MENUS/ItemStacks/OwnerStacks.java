@@ -100,10 +100,10 @@ public class OwnerStacks {
         List<VariableArg> variables = new ArrayList<>();
         variables.add(new VariableArg("%amount%", amount+""));
 
-        stack.setName(UtilString.get(config.getInfo().getName()).setTradeInfo(tradeInfo).setVariables(variables).setChestShop(chest).apply());
+        stack.setName(UtilString.get(config.getInfo().getName()).setVariables(tradeInfo).setVariables(variables).setVariables(chest).apply());
         for (String l : itemInfo.getLore()) {
-            stack.addLoreLine(UtilString.get(l).setTradeInfo(tradeInfo).setVariables(variables)
-                    .setChestShop(chest).hex().apply());
+            stack.addLoreLine(UtilString.get(l).setVariables(tradeInfo).setVariables(variables)
+                    .setVariables(chest).hex().apply());
         }
 
         List<MoEnchant> enchants = UtilMethods.getFormattedEnchants(itemInfo.getEnchantments());
@@ -131,10 +131,10 @@ public class OwnerStacks {
         }
         TradeInfo tradeInfo = activeSlot.getInfo();
 
-        stack.setName(UtilString.get(config.getInfo().getName()).setTradeInfo(tradeInfo).setChestShop(chest).apply());
+        stack.setName(UtilString.get(config.getInfo().getName()).setVariables(tradeInfo).setVariables(chest).apply());
         for (String l : itemInfo.getLore()) {
-            stack.addLoreLine(UtilString.get(l).setTradeInfo(tradeInfo)
-                    .setChestShop(chest).hex().apply());
+            stack.addLoreLine(UtilString.get(l).setVariables(tradeInfo)
+                    .setVariables(chest).hex().apply());
         }
 
         List<MoEnchant> enchants = UtilMethods.getFormattedEnchants(itemInfo.getEnchantments());
@@ -163,10 +163,10 @@ public class OwnerStacks {
 
         TradeInfo tradeInfo = activeSlot.getInfo();
 
-        stack.setName(UtilString.get(config.getInfo().getName()).setTradeInfo(tradeInfo).setChestShop(chest).apply());
+        stack.setName(UtilString.get(config.getInfo().getName()).setVariables(tradeInfo).setVariables(chest).apply());
         for (String l : itemInfo.getLore()) {
-            stack.addLoreLine(UtilString.get(l).setTradeInfo(tradeInfo)
-                    .setChestShop(chest).hex().apply());
+            stack.addLoreLine(UtilString.get(l).setVariables(tradeInfo)
+                    .setVariables(chest).hex().apply());
         }
 
         List<MoEnchant> enchants = UtilMethods.getFormattedEnchants(itemInfo.getEnchantments());
@@ -195,10 +195,10 @@ public class OwnerStacks {
 
         TradeInfo tradeInfo = activeSlot.getInfo();
 
-        stack.setName(UtilString.get(config.getInfo().getName()).setTradeInfo(tradeInfo).setChestShop(chest).apply());
+        stack.setName(UtilString.get(config.getInfo().getName()).setVariables(tradeInfo).setVariables(chest).apply());
         for (String l : itemInfo.getLore()) {
-            stack.addLoreLine(UtilString.get(l).setTradeInfo(tradeInfo)
-                    .setChestShop(chest).hex().apply());
+            stack.addLoreLine(UtilString.get(l).setVariables(tradeInfo)
+                    .setVariables(chest).hex().apply());
         }
 
         List<MoEnchant> enchants = UtilMethods.getFormattedEnchants(itemInfo.getEnchantments());
@@ -227,10 +227,10 @@ public class OwnerStacks {
 
         TradeInfo tradeInfo = activeSlot.getInfo();
 
-        stack.setName(UtilString.get(config.getInfo().getName()).setTradeInfo(tradeInfo).setChestShop(chest).apply());
+        stack.setName(UtilString.get(config.getInfo().getName()).setVariables(tradeInfo).setVariables(chest).apply());
         for (String l : itemInfo.getLore()) {
-            stack.addLoreLine(UtilString.get(l).setTradeInfo(tradeInfo)
-                    .setChestShop(chest).hex().apply());
+            stack.addLoreLine(UtilString.get(l).setVariables(tradeInfo)
+                    .setVariables(chest).hex().apply());
         }
 
         List<MoEnchant> enchants = UtilMethods.getFormattedEnchants(itemInfo.getEnchantments());
@@ -322,11 +322,11 @@ public class OwnerStacks {
 
         TradeType currentType = chest.getTradeType();
 
-        String buyPrefix = UtilString.get(TradeType.BUY.getPrefix()).setChestShop(chest).removeColors().apply();
-        String sellPrefix = UtilString.get(TradeType.SELL.getPrefix()).setChestShop(chest).removeColors().apply();
-        String switchMessage = UtilString.get(config.getSwitchMessage()).setChestShop(chest).apply();
+        String buyPrefix = UtilString.get(TradeType.BUY.getPrefix()).setVariables(chest).removeColors().apply();
+        String sellPrefix = UtilString.get(TradeType.SELL.getPrefix()).setVariables(chest).removeColors().apply();
+        String switchMessage = UtilString.get(config.getSwitchMessage()).setVariables(chest).apply();
 
-        stack.setName(UtilString.get(config.getName()).setChestShop(chest).hex().apply());
+        stack.setName(UtilString.get(config.getName()).setVariables(chest).hex().apply());
         stack.setLore(
                 "&r",
                 (currentType == TradeType.SELL ? " &a➛ "+sellPrefix : "&7➛ "+sellPrefix),
@@ -352,7 +352,7 @@ public class OwnerStacks {
         String selected = chest.getSelectedEconomy();
         List<Economy> economies = UtilMethods.getEconomies(active);
 
-        stack.setName(UtilString.get(config.getName()).setChestShop(chest).hex().apply());
+        stack.setName(UtilString.get(config.getName()).setVariables(chest).hex().apply());
         stack.addLoreLine("&r");
         for (Economy e : economies) {
             String id = e.getID();
@@ -361,7 +361,7 @@ public class OwnerStacks {
             stack.addLoreLine((activeEconomy ? " &a" : "&7") + "➛ " + prefix);
         }
         stack.addLoreLine("&r");
-        stack.addLoreLine(UtilString.get(config.getSwitchMessage()).setChestShop(chest).hex().apply());
+        stack.addLoreLine(UtilString.get(config.getSwitchMessage()).setVariables(chest).hex().apply());
         return stack.obtain();
     }
 
@@ -393,11 +393,11 @@ public class OwnerStacks {
         ChestShop chest = active.getChest();
         ChestStatus currentStatus = chest.getStatus();
 
-        String openPrefix = UtilString.get(ChestStatus.OPEN.getPrefix()).setChestShop(chest).removeColors().apply();
-        String closedPrefix = UtilString.get(ChestStatus.CLOSED.getPrefix()).setChestShop(chest).removeColors().apply();
-        String switchMessage = UtilString.get(config.getSwitchMessage()).setChestShop(chest).apply();
+        String openPrefix = UtilString.get(ChestStatus.OPEN.getPrefix()).setVariables(chest).removeColors().apply();
+        String closedPrefix = UtilString.get(ChestStatus.CLOSED.getPrefix()).setVariables(chest).removeColors().apply();
+        String switchMessage = UtilString.get(config.getSwitchMessage()).setVariables(chest).apply();
 
-        stack.setName(UtilString.get(config.getName()).setChestShop(chest).hex().apply());
+        stack.setName(UtilString.get(config.getName()).setVariables(chest).hex().apply());
         stack.setLore("&r",
                 (currentStatus == ChestStatus.OPEN ? " &a➛ "+openPrefix : "&7➛ "+openPrefix),
                 (currentStatus == ChestStatus.CLOSED ? " &a➛ "+closedPrefix : "&7➛ "+closedPrefix),

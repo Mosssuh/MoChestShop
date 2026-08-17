@@ -35,8 +35,8 @@ public class SlotTokenCommands {
 
                         UtilMethods.giveItem(player, token, 1, player.getLocation());
 
-                        UtilString.get(Messages.SLOT_TOKEN_SENDER_MESSAGE).setDefaultPlayerVariables(player).hex().sendMessage(sender);
-                        UtilString.get(Messages.SLOT_TOKEN_RECEIVER_MESSAGE).setDefaultPlayerVariables(player).hex().sendMessage(player);
+                        UtilString.get(Messages.SLOT_TOKEN_SENDER_MESSAGE).setVariables(player).hex().sendMessage(sender);
+                        UtilString.get(Messages.SLOT_TOKEN_RECEIVER_MESSAGE).setVariables(player).hex().sendMessage(player);
                     } else {
                         UsefulString.get("&cUse: /mochestshop token give <player>").hex().setPlaceholders(sender).sendMessage(sender);
                     }

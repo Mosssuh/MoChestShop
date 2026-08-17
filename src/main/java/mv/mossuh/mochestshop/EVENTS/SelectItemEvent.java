@@ -64,25 +64,25 @@ public class SelectItemEvent implements Listener {
             List<VariableArg> cooldownVariables = new ArrayList<>();
             cooldownVariables.add(new VariableArg("%cooldown%", Cooldown.showCooldownFormatted(COOLDOWN_CODE, COOLDOWN, UtilMethods.getTimeFormat())));
             UtilString.get(Messages.COOLDOWN).setVariables(cooldownVariables)
-                    .setChestShop(chest).hex().sendMessage(player);
+                    .setVariables(chest).hex().sendMessage(player);
             player.closeInventory();
             return;
         }
 
         if (!chest.hasEmptySlot()) {
-            UtilString.get(Messages.ITEM_TAKEN_SLOTS).setChestShop(chest).hex().sendMessage(player);
+            UtilString.get(Messages.ITEM_TAKEN_SLOTS).setVariables(chest).hex().sendMessage(player);
             player.closeInventory();
             return;
         }
 
         if (ChestShop.isChestShop(selected)) {
-            UtilString.get(Messages.DONT_TRADE_ITEM).setChestShop(chest).hex().sendMessage(player);
+            UtilString.get(Messages.DONT_TRADE_ITEM).setVariables(chest).hex().sendMessage(player);
             player.closeInventory();
             return;
         }
 
         if (chest.isInShop(selected)) {
-            UtilString.get(Messages.ITEM_ALREADY_ADDED).setChestShop(chest).hex().sendMessage(player);
+            UtilString.get(Messages.ITEM_ALREADY_ADDED).setVariables(chest).hex().sendMessage(player);
             player.closeInventory();
             return;
         }
@@ -104,12 +104,12 @@ public class SelectItemEvent implements Listener {
         chest.addSlot(slot);
 
         GUIItem item = OwnerItems.SelectedSlotItem(gui, active, slot);
-        gui.setItem(invPosition, item);
+        gui.setItem(item, invPosition);
         gui.refreshGUI(player);
 
         List<VariableArg> variables = new ArrayList<>();
         variables.add(new VariableArg("%slot%", slotPosition+""));
         UtilString.get(Messages.SLOT_ITEM_SELECTED).setVariables(variables)
-                .setChestShop(chest).hex().sendMessage(player);
+                .setVariables(chest).hex().sendMessage(player);
     }
 }

@@ -57,7 +57,7 @@ public class SetChestCommands {
 
                         List<VariableArg> variables = new ArrayList<>();
                         variables.add(new VariableArg("%unlocked_slots%", slots));
-                        UtilString.get(Messages.SET_SLOTS).setVariables(variables).setChestShop(chest).setPlaceholders(player).hex().sendMessage(sender);
+                        UtilString.get(Messages.SET_SLOTS).setVariables(variables).setVariables(chest).setPlaceholders(player).hex().sendMessage(sender);
                     } else {
                         UsefulString.get(Messages.NO_PERMISSION).hex().setPlaceholders(sender).sendMessage(sender);
                     }

@@ -34,7 +34,7 @@ public class BreakChestEvent implements Listener {
         if (!active.isValid()) return;
 
         if (!active.getChest().isOwner(uuid)) {
-            UtilString.get(Messages.IS_NOT_OWNER).setChestShop(chest).hex().sendMessage(player);
+            UtilString.get(Messages.IS_NOT_OWNER).setVariables(chest).hex().sendMessage(player);
             event.setCancelled(true);
             return;
         }
@@ -51,7 +51,7 @@ public class BreakChestEvent implements Listener {
         }
 
         UUID chestUUID = chest.getUUID();
-        UtilString.get(Messages.PLAYER_BREAK_CHEST).setChestShop(chest).hex().sendMessage(player);
+        UtilString.get(Messages.PLAYER_BREAK_CHEST).setVariables(chest).hex().sendMessage(player);
         ActiveChestManager.removeChest(chestUUID);
         ChestShopAPI.getManagers().getHolograms().getHologramHook().remove(active);
     }

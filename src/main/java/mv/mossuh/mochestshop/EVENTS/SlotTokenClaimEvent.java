@@ -65,14 +65,14 @@ public class SlotTokenClaimEvent implements Listener {
             List<VariableArg> cooldownVariables = new ArrayList<>();
             cooldownVariables.add(new VariableArg("%cooldown%", Cooldown.showCooldownFormatted(COOLDOWN_CODE, COOLDOWN, UtilMethods.getTimeFormat())));
             UtilString.get(Messages.COOLDOWN).setVariables(cooldownVariables)
-                    .setChestShop(chest).hex().sendMessage(player);
+                    .setVariables(chest).hex().sendMessage(player);
             player.closeInventory();
             return;
         }
 
         int slots = chest.getUnlockedSlots();
         if (slots == 10) {
-            UtilString.get(Messages.SLOT_TOKEN_MAX_UNLOCKED).setChestShop(chest).hex().sendMessage(player);
+            UtilString.get(Messages.SLOT_TOKEN_MAX_UNLOCKED).setVariables(chest).hex().sendMessage(player);
             player.closeInventory();
             return;
         }
@@ -88,6 +88,6 @@ public class SlotTokenClaimEvent implements Listener {
 
         chest.setUnlockedSlots(newSlot);
         player.closeInventory();
-        UtilString.get(Messages.SLOT_TOKEN_CLAIMED).setVariables(variables).setChestShop(chest).hex().sendMessage(player);
+        UtilString.get(Messages.SLOT_TOKEN_CLAIMED).setVariables(variables).setVariables(chest).hex().sendMessage(player);
     }
 }

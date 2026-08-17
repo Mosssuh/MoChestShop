@@ -41,6 +41,6 @@ public class PlaceChestEvent implements Listener {
         ActiveChestShop active = new ActiveChestShop(chest, location);
         ActiveChestManager.addChest(active);
         ChestShopAPI.getManagers().getHolograms().getHologramHook().spawn(active);
-        UtilString.get(Messages.PLAYER_PLACE_CHEST).setChestShop(chest).setPlaceholders(player).hex().sendMessage(player);
+        UtilString.get(Messages.PLAYER_PLACE_CHEST).setVariables(chest).setPlaceholders(player).hex().sendMessage(player);
     }
 }

@@ -52,15 +52,13 @@ public class ChestCreator {
         List<String> flags = itemInfo.getFlags();
         if (itemMeta != null) {
             if (itemInfo.hasName()) {
-                String name = UtilString.get(itemInfo.getName()).setChestShop(chest).setDefaultNumberRandomVariable().setPlaceholders(uuid)
-                        .setChangeOutputPlaceholder().setMathPlaceholder().hex().apply();
+                String name = UtilString.get(itemInfo.getName()).setVariables(chest).setPlaceholders(uuid).hex().apply();
                 itemMeta.setDisplayName(name);
             }
             if (itemInfo.hasLore()) {
                 List<String> lore = new ArrayList<>();
                 for (String line : itemInfo.getLore()) {
-                    lore.add(UtilString.get(line).setChestShop(chest).setDefaultNumberRandomVariable().setPlaceholders(uuid).setChangeOutputPlaceholder()
-                            .setMathPlaceholder().hex().apply());
+                    lore.add(UtilString.get(line).setVariables(chest).setPlaceholders(uuid).hex().apply());
                 }
                 itemMeta.setLore(lore);
             }
@@ -127,15 +125,13 @@ public class ChestCreator {
 
         if (itemMeta != null) {
             if (itemInfo.hasName()) {
-                String name = UtilString.get(itemInfo.getName()).setChestShopConfig(config).setDefaultNumberRandomVariable().setPlaceholders(uuid)
-                        .setChangeOutputPlaceholder().setMathPlaceholder().hex().apply();
+                String name = UtilString.get(itemInfo.getName()).setVariables(config).setPlaceholders(uuid).hex().apply();
                 itemMeta.setDisplayName(name);
             }
             if (itemInfo.hasLore()) {
                 List<String> lore = new ArrayList<>();
                 for (String line : itemInfo.getLore()) {
-                    lore.add(UtilString.get(line).setChestShopConfig(config).setDefaultNumberRandomVariable().setPlaceholders(uuid).setChangeOutputPlaceholder()
-                            .setMathPlaceholder().hex().apply());
+                    lore.add(UtilString.get(line).setVariables(config).setPlaceholders(uuid).hex().apply());
                 }
                 itemMeta.setLore(lore);
             }
@@ -196,15 +192,13 @@ public class ChestCreator {
         List<String> flags = itemInfo.getFlags();
 
         if (itemInfo.hasName()) {
-            String name = UtilString.get(itemInfo.getName()).setChestShop(chest).setDefaultNumberRandomVariable().setPlaceholders(uuid)
-                    .setChangeOutputPlaceholder().setMathPlaceholder().hex().apply();
+            String name = UtilString.get(itemInfo.getName()).setVariables(chest).setPlaceholders(uuid).hex().apply();
             itemMeta.setDisplayName(name);
         }
         if (itemInfo.hasLore()) {
             List<String> lore = new ArrayList<>();
             for (String line : itemInfo.getLore()) {
-                lore.add(UtilString.get(line).setChestShop(chest).setDefaultNumberRandomVariable().setPlaceholders(uuid).setChangeOutputPlaceholder()
-                        .setMathPlaceholder().hex().apply());
+                lore.add(UtilString.get(line).setVariables(chest).setPlaceholders(uuid).hex().apply());
             }
             itemMeta.setLore(lore);
         }

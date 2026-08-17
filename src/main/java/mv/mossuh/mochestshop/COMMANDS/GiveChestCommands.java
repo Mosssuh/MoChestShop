@@ -58,8 +58,8 @@ public class GiveChestCommands {
                         List<VariableArg> variables = new ArrayList<>();
                         variables.add(new VariableArg("%amount%", amountString));
                         variables.add(new VariableArg("%section%", section));
-                        UtilString.get(Messages.GIVE_CHEST_SENDER).setVariables(variables).setDefaultPlayerVariables(player).hex().sendMessage(sender);
-                        UtilString.get(Messages.GIVE_CHEST_RECEIVER).setVariables(variables).setDefaultPlayerVariables(player).hex().sendMessage(player);
+                        UtilString.get(Messages.GIVE_CHEST_SENDER).setVariables(variables).setVariables(player).hex().sendMessage(sender);
+                        UtilString.get(Messages.GIVE_CHEST_RECEIVER).setVariables(variables).setVariables(player).hex().sendMessage(player);
                     } else {
                         UsefulString.get("&cUse: /mochestshop give <player> <chest> <amount>").hex().setPlaceholders(sender).sendMessage(sender);
                     }

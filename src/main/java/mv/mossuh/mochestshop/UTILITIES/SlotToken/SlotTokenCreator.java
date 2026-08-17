@@ -38,15 +38,13 @@ public class SlotTokenCreator {
         List<String> flags = itemInfo.getFlags();
 
         if (itemInfo.hasName()) {
-            String name = UtilString.get(itemInfo.getName()).setDefaultNumberRandomVariable()
-                    .setChangeOutputPlaceholder().setMathPlaceholder().hex().apply();
+            String name = UtilString.get(itemInfo.getName()).hex().apply();
             itemMeta.setDisplayName(name);
         }
         if (itemInfo.hasLore()) {
             List<String> lore = new ArrayList<>();
             for (String line : itemInfo.getLore()) {
-                lore.add(UtilString.get(line).setDefaultNumberRandomVariable().setChangeOutputPlaceholder()
-                        .setMathPlaceholder().hex().apply());
+                lore.add(UtilString.get(line).hex().apply());
             }
             itemMeta.setLore(lore);
         }

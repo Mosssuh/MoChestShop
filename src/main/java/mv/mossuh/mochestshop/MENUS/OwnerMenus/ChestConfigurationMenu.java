@@ -27,7 +27,7 @@ public class ChestConfigurationMenu {
         // OfflinePlayer owner = Bukkit.getOfflinePlayer(chest.getOwner());
         OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerUUID);
 
-        String guiName = UtilString.get(Configs.getGuiNameConfig()).setPlaceholders(owner).setDefaultPlayerVariables(owner).hex().apply();
+        String guiName = UtilString.get(Configs.getGuiNameConfig()).setVariables(owner).setPlaceholders(owner).hex().apply();
         SingleGUI gui = new SingleGUI(6, guiName, location);
         gui.onGUIClick((e) -> {
             e.setCancelled(true);
@@ -48,7 +48,7 @@ public class ChestConfigurationMenu {
             if (slot.isValid()) {
                 if (slot.hasItem()) {
                     GUIItem item = OwnerItems.SelectedSlotItem(gui, active, slot);
-                    gui.setItem(pos, item);
+                    gui.setItem(item, pos);
                 } else {
                     GUIItem item;
                     if (slotPos <= unlockedSlots) {
@@ -56,7 +56,7 @@ public class ChestConfigurationMenu {
                     } else {
                         item = OwnerItems.LockedSlotItem(slotPos);
                     }
-                    gui.setItem(pos, item);
+                    gui.setItem(item, pos);
                 }
             } else {
                 GUIItem item;
@@ -65,22 +65,22 @@ public class ChestConfigurationMenu {
                 } else {
                     item = OwnerItems.LockedSlotItem(slotPos);
                 }
-                gui.setItem(pos, item);
+                gui.setItem(item, pos);
             }
             slotPos += 1;
         }
 
         GUIItem close = OwnerItems.CloseItem(player);
-        gui.setItem(49, close);
+        gui.setItem(close, 49);
 
         GUIItem trade = OwnerItems.TradeSwitch(player, gui, active);
-        gui.setItem(48, trade);
+        gui.setItem(trade, 48);
 
         GUIItem economy = OwnerItems.EconomyItem(player, gui, active);
-        gui.setItem(50, economy);
+        gui.setItem(economy, 50);
 
         GUIItem chestStatus = OwnerItems.StatusSwitch(player, gui, active);
-        gui.setItem(53, chestStatus);
+        gui.setItem(chestStatus, 53);
 
         player.openInventory(gui.getInventory());
     }

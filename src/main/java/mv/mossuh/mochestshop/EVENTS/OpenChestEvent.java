@@ -44,8 +44,8 @@ public class OpenChestEvent implements Listener {
         switch (switchRole) {
             case "player":
                 if (chest.getStatus().equals(ChestStatus.CLOSED)) {
-                    UtilString.get(Messages.CHEST_SHOP_CLOSED).setChestShop(chest).setPlaceholders(owner)
-                            .setDefaultPlayerVariables(player).hex().sendMessage(player);
+                    UtilString.get(Messages.CHEST_SHOP_CLOSED).setVariables(chest).setVariables(player).setPlaceholders(owner)
+                            .hex().sendMessage(player);
                     return;
                 }
 
@@ -68,8 +68,8 @@ public class OpenChestEvent implements Listener {
             ChestConfigurationMenu.open(uuid, activeChest);
         } else {
             if (chest.getStatus().equals(ChestStatus.CLOSED)) {
-                UtilString.get(Messages.CHEST_SHOP_CLOSED).setChestShop(chest).setPlaceholders(owner)
-                        .setDefaultPlayerVariables(player).hex().sendMessage(player);
+                UtilString.get(Messages.CHEST_SHOP_CLOSED).setVariables(chest).setVariables(player).setPlaceholders(owner)
+                        .hex().sendMessage(player);
                 return;
             }
             if (callOpenShopEvent(player, activeChest)) return;

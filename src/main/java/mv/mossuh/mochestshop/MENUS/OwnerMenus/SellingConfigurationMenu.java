@@ -44,8 +44,7 @@ public class SellingConfigurationMenu {
 
         OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerUUID);
 
-        String guiName = UtilString.get(Configs.getGuiNameConfig()).setPlaceholders(ownerUUID).setDefaultPlayerVariables(owner)
-                .setChestShop(chest).hex().apply();
+        String guiName = UtilString.get(Configs.getGuiNameConfig()).setVariables(chest).setVariables(owner).setPlaceholders(ownerUUID).hex().apply();
         SingleGUI gui = new SingleGUI(3, guiName, location);
         gui.onGUIClick((e) -> {
             e.setCancelled(true);
@@ -55,25 +54,25 @@ public class SellingConfigurationMenu {
         gui.setItem(gray, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 19, 20, 22 ,24, 25, 26);
 
         GUIItem collect1 = WithdrawCurrencyItem(player, chest, gui, slot);
-        gui.setItem(11, collect1);
+        gui.setItem(collect1, 11);
         GUIItem collect16 = WithdrawCurrencyItem(player, chest, gui, slot);
-        gui.setItem(12, collect16);
+        gui.setItem(collect16, 12);
         GUIItem collect32 = WithdrawCurrencyItem(player, chest, gui, slot);
-        gui.setItem(13, collect32);
+        gui.setItem(collect32, 13);
         GUIItem collect64 = WithdrawCurrencyItem(player, chest, gui, slot);
-        gui.setItem(14, collect64);
+        gui.setItem(collect64, 14);
 
         GUIItem collectALL = WithdrawCurrencyItem(player, chest, gui, slot);
-        gui.setItem(15, collectALL);
+        gui.setItem(collectALL, 15);
 
         GUIItem backItem = OwnerItems.BackItem(player, active);
-        gui.setItem(18, backItem);
+        gui.setItem(backItem, 18);
 
         GUIItem assignPrice = AssignPrice(chest, gui, slot);
-        gui.setItem(21, assignPrice);
+        gui.setItem(assignPrice, 21);
 
         GUIItem itemsForSale = ItemsForSale(chest, gui, slot);
-        gui.setItem(23, itemsForSale);
+        gui.setItem(itemsForSale, 23);
 
         player.openInventory(gui.getInventory());
     }
@@ -90,9 +89,9 @@ public class SellingConfigurationMenu {
         ItemStack saleItem = activeSlot.getItem();
 
         List<String> forSaleQuantity = new ArrayList<>();
-        String forSaleQuantityWrong = UtilString.get(Messages.ASSIGN_QUANTITY_WRONG).setChestShop(chest).setSlot(activeSlot).hex().apply();
+        String forSaleQuantityWrong = UtilString.get(Messages.ASSIGN_QUANTITY_WRONG).setVariables(chest).setVariables(activeSlot).hex().apply();
         for (String l : Messages.ASSIGN_QUANTITY) {
-            forSaleQuantity.add(UtilString.get(l).setChestShop(chest).setSlot(activeSlot).hex().apply());
+            forSaleQuantity.add(UtilString.get(l).setVariables(chest).setVariables(activeSlot).hex().apply());
         }
         ConfirmConfiguration config = new ConfirmConfiguration(forSaleQuantity, null, null, forSaleQuantityWrong);
         GUIItem item = new GUIItem(stack);
@@ -101,7 +100,7 @@ public class SellingConfigurationMenu {
             int quantity = (int) value;
 
             if (quantity <= 0) {
-                UtilString.get(Messages.INVALID_QUANTITY).setChestShop(chest).setSlot(activeSlot)
+                UtilString.get(Messages.INVALID_QUANTITY).setVariables(chest).setVariables(activeSlot)
                         .hex().sendMessage(player);
                 return;
             }
@@ -115,9 +114,8 @@ public class SellingConfigurationMenu {
                     // Add stock
                     boolean hasItems = UtilMethods.hasItem(player, saleItem, quantity);
                     if (!hasItems) {
-                        UtilString.get(Messages.SELLING_ITEMS_ADD_STOCK_NO_ENOUGH).setChestShop(chest).setSlot(activeSlot)
+                        UtilString.get(Messages.SELLING_ITEMS_ADD_STOCK_NO_ENOUGH).setVariables(chest).setVariables(activeSlot)
                                 .setVariables(variables).hex().sendMessage(player);
-                        player.closeInventory();
                         return;
                     }
 
@@ -125,10 +123,11 @@ public class SellingConfigurationMenu {
                     info.addItemsForSale(quantity);
 
                     item.setItemStack(OwnerStacks.getItemsForSale(chest, activeSlot));
-                    player.openInventory(gui.getInventory());
-                    gui.refreshGUI(player);
-
-                    UtilString.get(Messages.SELLING_ITEMS_ADDED_STOCK).setChestShop(chest).setSlot(activeSlot)
+                    Bukkit.getScheduler().runTask(instance, () -> {
+                            player.openInventory(gui.getInventory());
+                            gui.refreshGUI(player);
+                    });
+                    UtilString.get(Messages.SELLING_ITEMS_ADDED_STOCK).setVariables(chest).setVariables(activeSlot)
                             .setVariables(variables).hex().sendMessage(player);
                     break;
                 case RIGHT:
@@ -137,23 +136,21 @@ public class SellingConfigurationMenu {
                     int quantitySale = info.getItemsForSale();
 
                     if (quantitySale < quantity) {
-                        UtilString.get(Messages.SELLING_ITEMS_WITHDRAW_STOCK_NO_ENOUGH).setChestShop(chest).setSlot(activeSlot)
+                        UtilString.get(Messages.SELLING_ITEMS_WITHDRAW_STOCK_NO_ENOUGH).setVariables(chest).setVariables(activeSlot)
                                 .setVariables(variables).hex().sendMessage(player);
-                        player.closeInventory();
                         return;
                     }
 
                     boolean hasSpace = UtilMethods.hasEnoughSpace(player, saleItem, quantity);
                     if (!hasSpace) {
-                        UtilString.get(Messages.SELLING_ITEMS_WITHDRAW_NO_ENOUGH_SPACE).setChestShop(chest).setSlot(activeSlot)
+                        UtilString.get(Messages.SELLING_ITEMS_WITHDRAW_NO_ENOUGH_SPACE).setVariables(chest).setVariables(activeSlot)
                                 .setVariables(variables).hex().sendMessage(player);
-                        player.closeInventory();
                         return;
                     }
 
                     info.removeItemsForSale(quantity);
                     UtilMethods.giveItem(player, saleItem, quantity, player.getLocation());
-                    UtilString.get(Messages.SELLING_ITEMS_WITHDRAWN_STOCK).setChestShop(chest).setSlot(activeSlot)
+                    UtilString.get(Messages.SELLING_ITEMS_WITHDRAWN_STOCK).setVariables(chest).setVariables(activeSlot)
                             .setVariables(variables).hex().sendMessage(player);
 
                     item.setItemStack(OwnerStacks.getItemsForSale(chest, activeSlot));
@@ -175,9 +172,9 @@ public class SellingConfigurationMenu {
 
         GUIItem item = new GUIItem(stack);
         List<String> assignPrice = new ArrayList<>();
-        String assignPriceWrong = UtilString.get(Messages.ASSIGN_PRICE_WRONG).setSlot(activeSlot).setChestShop(chest).hex().apply();
+        String assignPriceWrong = UtilString.get(Messages.ASSIGN_PRICE_WRONG).setVariables(activeSlot).setVariables(chest).hex().apply();
         for (String l : Messages.ASSIGN_PRICE) {
-            assignPrice.add(UtilString.get(l).setSlot(activeSlot).setChestShop(chest).hex().apply());
+            assignPrice.add(UtilString.get(l).setVariables(activeSlot).setVariables(chest).hex().apply());
         }
 
         ConfirmConfiguration confirmConfig = new ConfirmConfiguration(assignPrice, null, null, assignPriceWrong);
@@ -186,14 +183,14 @@ public class SellingConfigurationMenu {
             double newPrice = (double) value;
 
             if (newPrice < 0) {
-                UtilString.get(Messages.INVALID_PRICE).setChestShop(chest).setSlot(activeSlot)
+                UtilString.get(Messages.INVALID_PRICE).setVariables(chest).setVariables(activeSlot)
                         .hex().sendMessage(player);
                 return;
             }
 
             SellingInfo info = (SellingInfo) tradeInfo;
             if (info.getSoldItems() > 0) {
-                UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setChestShop(chest).setSlot(activeSlot)
+                UtilString.get(Messages.COLLECT_COINS_TO_CHANGE).setVariables(chest).setVariables(activeSlot)
                         .hex().sendMessage(player);
                 return;
             }
@@ -205,7 +202,7 @@ public class SellingConfigurationMenu {
             List<VariableArg> refreshedVariables = new ArrayList<>();
             refreshedVariables.add(new VariableArg("%price%", UsefulMethods.formatNumber(refreshedPrice, Config.MAX_DECIMAL)));
 
-            UtilString.get(Messages.ASSIGNED_PRICE).setVariables(refreshedVariables).setChestShop(chest).setSlot(activeSlot).hex().sendMessage(player);
+            UtilString.get(Messages.ASSIGNED_PRICE).setVariables(refreshedVariables).setVariables(chest).setVariables(activeSlot).hex().sendMessage(player);
 
             item.setItemStack(OwnerStacks.getSellAssignPrice(chest, activeSlot));
             Bukkit.getScheduler().runTask(instance, () -> {
@@ -232,13 +229,13 @@ public class SellingConfigurationMenu {
             int newAmount = 0;
 
             if (newAvailable == 0) {
-                UtilString.get(Messages.SLOT_NO_COINS_COLLECT).setSlot(activeSlot).setDefaultPlayerVariables(player)
-                        .setPlaceholders(ownerUUID).setChestShop(chest).hex().sendMessage(player);
+                UtilString.get(Messages.SLOT_NO_COINS_COLLECT).setVariables(activeSlot).setVariables(player).setVariables(chest)
+                        .setPlaceholders(ownerUUID).hex().sendMessage(player);
                 player.closeInventory();
                 return;
             }
-            UtilString.get(Messages.SLOT_COLLECT_COINS).setDefaultPlayerVariables(player)
-                    .setSlot(activeSlot).setPlaceholders(ownerUUID).setChestShop(chest).hex().sendMessage(player);
+            UtilString.get(Messages.SLOT_COLLECT_COINS).setVariables(player)
+                    .setVariables(activeSlot).setVariables(chest).setPlaceholders(ownerUUID).hex().sendMessage(player);
 
 
             double price = newAvailable * info.getSellingPrice();

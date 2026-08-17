@@ -11,6 +11,7 @@ import mv.mossuh.mochestshop.MoChestShop;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Collectors.PurchasingInfo;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Collectors.TradeInfo;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Slot;
+import mv.mossuh.mochestshop.UTILITIES.DefaultVariables;
 import mv.mossuh.mochestshop.UTILITIES.Enums.TradeType;
 import mv.mossuh.mochestshop.UTILITIES.UtilMethods;
 import mv.mossuh.mochestshop.UTILITIES.UtilString;
@@ -42,8 +43,8 @@ public class PurchasingConfigurationMenu {
 
         OfflinePlayer owner = Bukkit.getOfflinePlayer(ownerUUID);
 
-        String guiName = UtilString.get(Configs.getGuiNameConfig()).setPlaceholders(ownerUUID).setDefaultPlayerVariables(owner)
-                .setChestShop(chest).hex().apply();
+        String guiName = UtilString.get(Configs.getGuiNameConfig()).setVariables(owner).setVariables(chest).setPlaceholders(ownerUUID)
+                .hex().apply();
         SingleGUI gui = new SingleGUI(3, guiName, location);
         gui.onGUIClick((e) -> {
             e.setCancelled(true);
@@ -53,24 +54,24 @@ public class PurchasingConfigurationMenu {
         gui.setItem(gray, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 19, 20, 21, 23 ,24, 25, 26);
 
         GUIItem collect1 = RemoveAmountItem(1, player, chest, gui, slot);
-        gui.setItem(11, collect1);
+        gui.setItem(collect1, 11);
         GUIItem collect16 = RemoveAmountItem(16, player, chest, gui, slot);
-        gui.setItem(12, collect16);
+        gui.setItem(collect16, 12);
         GUIItem collect32 = RemoveAmountItem(32, player, chest, gui, slot);
-        gui.setItem(13, collect32);
+        gui.setItem(collect32, 13);
         GUIItem collect64 = RemoveAmountItem(64, player, chest, gui, slot);
-        gui.setItem(14, collect64);
+        gui.setItem(collect64, 14);
 
         PurchasingInfo info = (PurchasingInfo) slot.getInfo();
         int available = info.getPurchasedItems();
         GUIItem collectALL = RemoveAmountItem(available, player, chest, gui, slot);
-        gui.setItem(15, collectALL);
+        gui.setItem(collectALL, 15);
 
         GUIItem backItem = OwnerItems.BackItem(player, active);
-        gui.setItem(18, backItem);
+        gui.setItem(backItem, 18);
 
         GUIItem assignPrice = AssignPrice(chest, gui, slot);
-        gui.setItem(22, assignPrice);
+        gui.setItem(assignPrice, 22);
 
         player.openInventory(gui.getInventory());
     }
@@ -91,30 +92,30 @@ public class PurchasingConfigurationMenu {
         item.onItemClick((e) -> {
             int newAvailable = info.getPurchasedItems();
             int newAmount = newAvailable - amount;
-            List<VariableArg> collectedVariables = new ArrayList<>(UtilMethods.getSlotVariables(info));
+            List<VariableArg> collectedVariables = new ArrayList<>(DefaultVariables.getSlotVariables(info));
             collectedVariables.add(new VariableArg("%amount%", amount+""));
 
             if (newAvailable == 0) {
-                UtilString.get(Messages.SLOT_NO_ITEMS_COLLECT).setVariables(variables).setDefaultPlayerVariables(player)
-                        .setPlaceholders(ownerUUID).setChestShop(chest).setSlot(activeSlot).hex().sendMessage(player);
+                UtilString.get(Messages.SLOT_NO_ITEMS_COLLECT).setVariables(variables).setVariables(player).setVariables(chest).setVariables(activeSlot)
+                        .setPlaceholders(ownerUUID).hex().sendMessage(player);
                 player.closeInventory();
                 return;
             }
             if (newAmount < 0) {
-                UtilString.get(Messages.SLOT_NO_ITEMS_COLLECT).setVariables(variables).setDefaultPlayerVariables(player)
-                        .setPlaceholders(ownerUUID).setChestShop(chest).setSlot(activeSlot).hex().sendMessage(player);
+                UtilString.get(Messages.SLOT_NO_ITEMS_COLLECT).setVariables(variables).setVariables(player).setVariables(chest).setVariables(activeSlot)
+                        .setPlaceholders(ownerUUID).hex().sendMessage(player);
                 player.closeInventory();
                 return;
             }
             if (!UtilMethods.hasEnoughSpace(player, purchasedItem, amount)) {
-                UtilString.get(Messages.COLLECT_ITEMS_NOT_ENOUGH_SPACE).setVariables(variables).setDefaultPlayerVariables(player)
-                        .setPlaceholders(ownerUUID).setChestShop(chest).setSlot(activeSlot).hex().sendMessage(player);
+                UtilString.get(Messages.COLLECT_ITEMS_NOT_ENOUGH_SPACE).setVariables(variables).setVariables(player).setVariables(chest).setVariables(activeSlot)
+                        .setPlaceholders(ownerUUID).hex().sendMessage(player);
                 player.closeInventory();
                 return;
             }
             UtilMethods.giveItem(player, purchasedItem, amount, player.getLocation());
-            UtilString.get(Messages.SLOT_COLLECT_ITEMS).setDefaultPlayerVariables(player)
-                    .setVariables(collectedVariables).setPlaceholders(ownerUUID).setChestShop(chest).setSlot(activeSlot).hex().sendMessage(player);
+            UtilString.get(Messages.SLOT_COLLECT_ITEMS).setVariables(player)
+                    .setVariables(collectedVariables).setVariables(chest).setVariables(activeSlot).setPlaceholders(ownerUUID).hex().sendMessage(player);
 
             info.setPurchasedItems(newAmount);
             item.setItemStack(OwnerStacks.getPurchasingRemoveAmount(chest, activeSlot, amount));
@@ -136,14 +137,14 @@ public class PurchasingConfigurationMenu {
         double price = info.getPurchasingPrice();
 
 
-        List<VariableArg> variables = new ArrayList<>(UtilMethods.getSlotVariables(info));
+        List<VariableArg> variables = new ArrayList<>(DefaultVariables.getSlotVariables(info));
         variables.add(new VariableArg("%price%", UsefulMethods.formatNumber(price, Config.MAX_DECIMAL)));
 
         GUIItem item = new GUIItem(stack);
         List<String> assignPrice = new ArrayList<>();
-        String assignPriceWrong = UtilString.get(Messages.ASSIGN_PRICE_WRONG).setVariables(variables).setChestShop(chest).setSlot(activeSlot).hex().apply();
+        String assignPriceWrong = UtilString.get(Messages.ASSIGN_PRICE_WRONG).setVariables(variables).setVariables(chest).setVariables(activeSlot).hex().apply();
         for (String l : Messages.ASSIGN_PRICE) {
-            assignPrice.add(UtilString.get(l).setVariables(variables).setChestShop(chest).setSlot(activeSlot).hex().apply());
+            assignPrice.add(UtilString.get(l).setVariables(variables).setVariables(chest).setVariables(activeSlot).hex().apply());
         }
 
         ConfirmConfiguration confirmConfig = new ConfirmConfiguration(assignPrice, null, null, assignPriceWrong);
@@ -152,20 +153,18 @@ public class PurchasingConfigurationMenu {
             double newPrice = (double) value;
 
             if (newPrice < 0) {
-                UtilString.get(Messages.INVALID_PRICE).setChestShop(chest).setSlot(activeSlot)
+                UtilString.get(Messages.INVALID_PRICE).setVariables(chest).setVariables(activeSlot)
                         .hex().sendMessage(player);
                 return;
             }
-
-
 
             PurchasingInfo refreshedInfo = (PurchasingInfo) tradeInfo;
             refreshedInfo.setPurchasingPrice(newPrice);
 
             double refreshedPrice = refreshedInfo.getPurchasingPrice();
-            List<VariableArg> refreshedVariables = new ArrayList<>(UtilMethods.getSlotVariables(refreshedInfo));
+            List<VariableArg> refreshedVariables = new ArrayList<>(DefaultVariables.getSlotVariables(refreshedInfo));
             refreshedVariables.add(new VariableArg("%price%", UsefulMethods.formatNumber(refreshedPrice, Config.MAX_DECIMAL)));
-            UtilString.get(Messages.ASSIGNED_PRICE).setVariables(refreshedVariables).setChestShop(chest).setSlot(activeSlot).hex().sendMessage(player);
+            UtilString.get(Messages.ASSIGNED_PRICE).setVariables(refreshedVariables).setVariables(chest).setVariables(activeSlot).hex().sendMessage(player);
             item.setItemStack(OwnerStacks.getPurchasingAssignPrice(chest, activeSlot));
             Bukkit.getScheduler().runTask(instance, () -> {
                 player.openInventory(gui.getInventory());
