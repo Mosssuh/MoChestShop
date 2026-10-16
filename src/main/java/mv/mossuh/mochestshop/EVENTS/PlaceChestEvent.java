@@ -4,6 +4,7 @@ import mv.mossuh.mochestshop.API.ChestShopAPI;
 import mv.mossuh.mochestshop.CHESTS.ActiveChestShop;
 import mv.mossuh.mochestshop.CHESTS.ChestShop;
 import mv.mossuh.mochestshop.CONFIGS.Messages;
+import mv.mossuh.mochestshop.HOLOGRAM.HologramHook;
 import mv.mossuh.mochestshop.MANAGERS.ActiveChestManager;
 import mv.mossuh.mochestshop.UTILITIES.UtilString;
 import org.bukkit.Location;
@@ -40,7 +41,11 @@ public class PlaceChestEvent implements Listener {
 
         ActiveChestShop active = new ActiveChestShop(chest, location);
         ActiveChestManager.addChest(active);
-        ChestShopAPI.getManagers().getHolograms().getHologramHook().spawn(active);
+
+        HologramHook hologram = ChestShopAPI.getManagers().getHolograms().getHologramHook();
+        if (hologram != null) {
+            hologram.spawn(active);
+        }
         UtilString.get(Messages.PLAYER_PLACE_CHEST).setVariables(chest).setPlaceholders(player).hex().sendMessage(player);
     }
 }

@@ -7,6 +7,7 @@ import mv.mossuh.mochestshop.CHESTS.ChestShop;
 import mv.mossuh.mochestshop.CONFIGS.Configs;
 import mv.mossuh.mochestshop.CONFIGS.Messages;
 import mv.mossuh.mochestshop.MENUS.ItemStacks.PlayerStacks;
+import mv.mossuh.mochestshop.MoChestShop;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Collectors.PurchasingInfo;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Collectors.SellingInfo;
 import mv.mossuh.mochestshop.UTILITIES.Chest.Slot;
@@ -27,6 +28,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class PlayerItems {
+
+    private static final MoChestShop instance = MoChestShop.getInstance();
 
     public static GUIItem SlotItem(SingleGUI gui, ActiveChestShop active, Slot activeSlot) {
         ChestShop chest = active.getChest();
@@ -94,19 +97,21 @@ public class PlayerItems {
                     return;
                 }
 
-                PlayerTradeEvent tradeEvent = new PlayerTradeEvent(active, player, type, activeSlot, amount);
-                Bukkit.getPluginManager().callEvent(tradeEvent);
+                Bukkit.getScheduler().runTask(instance, () -> {
+                    PlayerTradeEvent tradeEvent = new PlayerTradeEvent(active, player, type, activeSlot, amount);
+                    Bukkit.getPluginManager().callEvent(tradeEvent);
 
-                if (tradeEvent.isCancelled()) return;
+                    if (tradeEvent.isCancelled()) return;
 
-                refreshedVariables.add(new VariableArg("%amount%", amount+""));
+                    refreshedVariables.add(new VariableArg("%amount%", amount+""));
 
-                info.addPurchasedItems(amount);
-                UtilMethods.removeItem(player, tradedItem, amount);
-                UtilString.get(Messages.PURCHASING_OWNER_PURCHASED_ITEMS).setVariables(refreshedVariables)
-                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID).hex().sendMessage(ownerUUID);
-                UtilString.get(Messages.PURCHASING_CLIENT_SOLD_ITEMS).setVariables(refreshedVariables)
-                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID).hex().sendMessage(player);
+                    info.addPurchasedItems(amount);
+                    UtilMethods.removeItem(player, tradedItem, amount);
+                    UtilString.get(Messages.PURCHASING_OWNER_PURCHASED_ITEMS).setVariables(refreshedVariables)
+                            .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID).hex().sendMessage(ownerUUID);
+                    UtilString.get(Messages.PURCHASING_CLIENT_SOLD_ITEMS).setVariables(refreshedVariables)
+                            .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID).hex().sendMessage(player);
+                });
             } else if (type.equals(TradeType.SELL)) {
                 // The player is purchasing items
                 SellingInfo info = (SellingInfo) activeSlot.getInfo();
@@ -130,23 +135,25 @@ public class PlayerItems {
                     return;
                 }
 
-                PlayerTradeEvent tradeEvent = new PlayerTradeEvent(active, player, type, activeSlot, amount);
-                Bukkit.getPluginManager().callEvent(tradeEvent);
+                Bukkit.getScheduler().runTask(instance, () -> {
+                    PlayerTradeEvent tradeEvent = new PlayerTradeEvent(active, player, type, activeSlot, amount);
+                    Bukkit.getPluginManager().callEvent(tradeEvent);
+                    if (tradeEvent.isCancelled()) return;
 
-                if (tradeEvent.isCancelled()) return;
+                    refreshedVariables.add(new VariableArg("%amount%", amount+""));
+                    info.removeItemsForSale(amount);
+                    info.addSoldItems(amount);
+                    UtilMethods.giveItem(player, tradedItem, amount, player.getLocation());
+                    ChestShopAPI.getManagers().getEconomies().getEconomy(id).removeAmount(uuid, cost);
 
-                refreshedVariables.add(new VariableArg("%amount%", amount+""));
-                info.removeItemsForSale(amount);
-                info.addSoldItems(amount);
-                UtilMethods.giveItem(player, tradedItem, amount, player.getLocation());
-                ChestShopAPI.getManagers().getEconomies().getEconomy(id).removeAmount(uuid, cost);
+                    UtilString.get(Messages.SELLING_OWNER_SOLD_ITEMS).setVariables(refreshedVariables)
+                            .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID)
+                            .hex().sendMessage(ownerUUID);
+                    UtilString.get(Messages.SELLING_CLIENT_PURCHASED_ITEMS).setVariables(refreshedVariables)
+                            .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID)
+                            .hex().sendMessage(player);
+                });
 
-                UtilString.get(Messages.SELLING_OWNER_SOLD_ITEMS).setVariables(refreshedVariables)
-                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID)
-                        .hex().sendMessage(ownerUUID);
-                UtilString.get(Messages.SELLING_CLIENT_PURCHASED_ITEMS).setVariables(refreshedVariables)
-                        .setVariables(chest).setVariables(activeSlot).setVariables(player).setVariables(tradedItem).setPlaceholders(ownerUUID)
-                        .hex().sendMessage(player);
             }
         }, ResponseType.INTEGER);
         return item;

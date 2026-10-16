@@ -13,7 +13,9 @@ import mv.mossuh.mochestshop.UTILITIES.Economies.Economy;
 import mv.mossuh.mochestshop.UTILITIES.UtilString;
 import mv.mossuh.mocore.ENUMS.PluginType;
 import mv.mossuh.mocore.EVENTS.PluginCheckerEvent;
+import mv.mossuh.mocore.UTILITIES.InstanceManager;
 import mv.mossuh.mocore.UTILITIES.UsefulString;
+import org.black_ixx.playerpoints.PlayerPoints;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -37,11 +39,10 @@ public class CheckerEvent implements Listener {
 
         for (Economy e : economies) {
             String id = e.getID();
-            String economy = e.getEconomy();
-            EconomyHook hook = new InvalidHook();
+            EconomyHook economyHook = new InvalidHook();
 
            if (type.equals(PluginType.Vault)) {
-                VaultEconomyHook vh = new VaultEconomyHook();
+                VaultEconomyHook hook = new VaultEconomyHook();
                 RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = MoChestShop.getInstance().getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
                 if (rsp == null) {
                     UtilString.get(Config.PREFIX + " &2HOOK! &cError when detecting Registered Economy with ID " + id + " from Vault.")
@@ -49,15 +50,20 @@ public class CheckerEvent implements Listener {
                     return;
                 }
                 net.milkbowl.vault.economy.Economy econ = rsp.getProvider();
-                vh.setProvider(econ);
-                hook = vh;
-            }
+                hook.setProvider(econ);
+                economyHook = hook;
+           } else if (type.equals(PluginType.PlayerPoints))  {
+               PlayerPointsEconomyHook hook = new PlayerPointsEconomyHook();
+               PlayerPoints instance = InstanceManager.getPluginAs(type, PlayerPoints.class);
+               hook.setAPI(instance.getAPI());
+               economyHook = hook;
+           }
 
-            if (hook.getPlugin().equals("INVALID")) { continue; }
+            if (economyHook.getPlugin().equals("INVALID")) { continue; }
 
             UtilString.get(Config.PREFIX + " &2HOOK! &aDetected economy with ID " + id + ". Registering...")
                     .hex().sendMessageInConsole();
-            hooks.put(id, hook);
+            hooks.put(id, economyHook);
         }
 
         for (String id : hooks.keySet()) {

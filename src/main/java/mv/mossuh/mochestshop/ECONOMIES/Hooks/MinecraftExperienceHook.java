@@ -7,12 +7,14 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class MinecraftExperienceHook implements EconomyHook {
-    private static final String plugin = "Minecraft";
+
+    private static final String PLUGIN = "Minecraft";
+
     private String economy = "experience";
 
     @Override
     public String getPlugin() {
-        return plugin;
+        return PLUGIN;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class MinecraftExperienceHook implements EconomyHook {
     public double getAmount(UUID uuid) {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return 0;
-        
+
         return player.getTotalExperience();
     }
 
@@ -38,9 +40,12 @@ public class MinecraftExperienceHook implements EconomyHook {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        double exp = player.getTotalExperience();
-        int newExp = (int) (exp - amount);
-        player.setTotalExperience(newExp);
+        int newExperience = (int) Math.max(
+                0,
+                player.getTotalExperience() - amount
+        );
+
+        setExperience(player, newExperience);
     }
 
     @Override
@@ -48,9 +53,11 @@ public class MinecraftExperienceHook implements EconomyHook {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        double exp = player.getTotalExperience();
-        int newExp = (int) (exp - amount);
-        player.setTotalExperience(newExp);
+        int newExperience = (int) (
+                player.getTotalExperience() + amount
+        );
+
+        setExperience(player, newExperience);
     }
 
     @Override
@@ -58,7 +65,15 @@ public class MinecraftExperienceHook implements EconomyHook {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return false;
 
-        double exp = player.getTotalExperience();
-        return exp >=  amount;
+        return player.getTotalExperience() >= amount;
+    }
+
+    private void setExperience(Player player, int experience) {
+        experience = Math.max(0, experience);
+        player.setExp(0);
+        player.setLevel(0);
+        player.setTotalExperience(0);
+
+        player.giveExp(experience);
     }
 }

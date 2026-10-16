@@ -71,7 +71,7 @@ public class SlotTokenClaimEvent implements Listener {
         }
 
         int slots = chest.getUnlockedSlots();
-        if (slots == 10) {
+        if (slots >= 10) {
             UtilString.get(Messages.SLOT_TOKEN_MAX_UNLOCKED).setVariables(chest).hex().sendMessage(player);
             player.closeInventory();
             return;
